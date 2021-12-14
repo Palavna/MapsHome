@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">GoogleMapsHome</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="start">start</string>
+    <string name="stop">stop</string>
+    <string name="channel_name">channel_name</string>
+    <string name="channel_description">channel_description</string>
+</resources>
