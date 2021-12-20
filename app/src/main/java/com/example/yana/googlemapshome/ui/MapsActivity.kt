@@ -16,12 +16,14 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import java.text.SimpleDateFormat
 import java.util.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MapsActivity : BaseMapActivity() {
 
     private lateinit var binding: ActivityMapsBinding
     override val mapId: Int = R.id.map
     private lateinit var sheetBehavior: BottomSheetBehavior<ConstraintLayout>
+    private val viewModel: MapsViewModel by viewModel()
 
     var startTime = 0L
     val time = object: CountDownTimer(Long.MAX_VALUE, 1000L){
