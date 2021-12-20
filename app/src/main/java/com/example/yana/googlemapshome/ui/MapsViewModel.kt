@@ -1,4 +1,6 @@
 package com.example.yana.googlemapshome.ui
 
-class MapsViewModel {
+import androidx.lifecycle.ViewModel
+
+class MapsViewModel: ViewModel() {
 }

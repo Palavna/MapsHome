@@ -11,6 +11,8 @@ import androidx.core.app.NotificationCompat
 import com.example.yana.googlemapshome.R
 import com.example.yana.googlemapshome.utils.NotificationUtils
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.model.LatLng
+import org.greenrobot.eventbus.EventBus
 import java.nio.file.attribute.AclEntry
 
 class SimpleService: Service() {
@@ -41,6 +43,8 @@ class SimpleService: Service() {
         startLocationUpdates()
     }
 
+    private val latLngList = arrayListOf<LatLng>()
+
     @SuppressLint("MissingPermission")
     private fun startLocationUpdates(){
         fusedLocation = LocationServices.getFusedLocationProviderClient(this)
@@ -53,7 +57,11 @@ class SimpleService: Service() {
         fusedCallback = object : LocationCallback(){
             override fun onLocationResult(p0: LocationResult?) {
                 super.onLocationResult(p0)
-                Log.d("aaaaaaaaaaaa", p0?.lastLocation?.latitude.toString())
+
+                if (p0?.lastLocation != null) {
+                    latLngList.add(LatLng(p0.lastLocation.latitude, p0.lastLocation.longitude))
+                }
+                Log.d("aaaaaaaaaaaa", latLngList.size.toString())
             }
         }
         fusedLocation?.requestLocationUpdates(fusedRequest, fusedCallback, Looper.getMainLooper())
@@ -62,6 +70,7 @@ class SimpleService: Service() {
     override fun onDestroy() {
         super.onDestroy()
         fusedLocation?.removeLocationUpdates(fusedCallback)
+        EventBus.getDefault().post(EventLocations(locations = latLngList))
     }
 }
 

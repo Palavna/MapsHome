@@ -13,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.maps.android.SphericalUtil
 
 abstract class BaseMapActivity: AppCompatActivity(), OnMapReadyCallback {
 
@@ -137,9 +138,16 @@ abstract class BaseMapActivity: AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
+    var lastLatLng: LatLng? = null
+    var total: Long = 0
 
     fun createLine(latLng: LatLng) {
         polylineOptions?.add(latLng)
         mMap.addPolyline(polylineOptions!!)
+        if (lastLatLng!= null)
+            total += SphericalUtil.computeDistanceBetween(lastLatLng, latLng).toLong()
+
+        mMap.addMarker(MarkerOptions().position(latLng).title(total.toString()))
+        lastLatLng = latLng
     }
 }

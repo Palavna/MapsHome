@@ -7,10 +7,13 @@ import android.util.Log
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.yana.googlemapshome.R
+import com.example.yana.googlemapshome.data.EventLocations
 import com.example.yana.googlemapshome.data.ServiceAction
 import com.example.yana.googlemapshome.data.SimpleService
 import com.example.yana.googlemapshome.databinding.ActivityMapsBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,11 +32,8 @@ class MapsActivity : BaseMapActivity() {
             binding.includedBottomSheet.tvTimer.text = sdf.format(res)
             Log.d("dfgsdfg", res.toString())
         }
-
         override fun onFinish() {
-
         }
-
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,27 +43,23 @@ class MapsActivity : BaseMapActivity() {
         sheetBehavior = BottomSheetBehavior.from(binding.includedBottomSheet.bottomSheet)
         sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
-
-
-
         binding.includedBottomSheet.btnStart.setOnClickListener {
             startTime = System.currentTimeMillis()
             time.start()
         }
 
-
-
-        binding.start.setOnClickListener {
-            val intent = Intent(this, SimpleService::class.java)
-            intent.action = ServiceAction.START.name
-            startService(intent)
-//            NotificationUtils.showNotification(this)
-        }
         binding.stop.setOnClickListener {
             val intent = Intent(this, SimpleService::class.java)
             intent.action = ServiceAction.STOP.name
             startService(intent)
         }
+
+        binding.includedBottomSheet.btnStart.setOnClickListener {
+            val intent = Intent(this, SimpleService::class.java)
+            intent.action = ServiceAction.START.name
+            startService(intent)
+        }
+
         binding.includedBottomSheet.topBar.setOnClickListener {
             sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
@@ -80,6 +76,21 @@ class MapsActivity : BaseMapActivity() {
             }
 
         })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe
+    fun eventLocations(data: EventLocations){
+        Log.d("sdsdfsdf", data.locations.size.toString())
     }
 
     companion object {
