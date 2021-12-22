@@ -3,11 +3,13 @@ package com.example.yana.googlemapshome.data
 import android.annotation.SuppressLint
 import android.app.*
 import android.content.Intent
+import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.MutableLiveData
 import com.example.yana.googlemapshome.R
 import com.example.yana.googlemapshome.utils.NotificationUtils
 import com.google.android.gms.location.*
@@ -17,13 +19,19 @@ import java.nio.file.attribute.AclEntry
 
 class SimpleService: Service() {
 
-    override fun onBind(p0: Intent?): IBinder? {
-        return null
+    override fun onBind(p0: Intent?): IBinder {
+        return SimpleServiceBinder()
+    }
+
+    inner class SimpleServiceBinder: Binder(){
+        val service: SimpleService
+        get() = this@SimpleService
     }
 
     private var fusedLocation: FusedLocationProviderClient? = null
     private var fusedCallback: LocationCallback? = null
     private var fusedRequest: LocationRequest? = null
+    val point = MutableLiveData<EventLocations>()
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (intent?.action == ServiceAction.STOP.name){
@@ -34,6 +42,11 @@ class SimpleService: Service() {
         }
 
         return START_STICKY
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        createNotification()
     }
 
     private val mNotificationId = 123
@@ -70,7 +83,8 @@ class SimpleService: Service() {
     override fun onDestroy() {
         super.onDestroy()
         fusedLocation?.removeLocationUpdates(fusedCallback)
-        EventBus.getDefault().post(EventLocations(locations = latLngList))
+        point.postValue(EventLocations(locations = latLngList))
+//        EventBus.getDefault().post(EventLocations(locations = latLngList))
     }
 }
 

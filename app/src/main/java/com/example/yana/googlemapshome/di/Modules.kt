@@ -18,12 +18,11 @@ val mapsModules by lazy {
 }
 
 val viewModelModules = module {
-    viewModel { MapsViewModel() }
+    viewModel { MapsViewModel(get()) }
 }
 
 val dbModule = module {
     single { Room.databaseBuilder(get(), MapsDataBase::class.java, "weather")
-        .allowMainThreadQueries()
         .build()
     }
     single { get<MapsDataBase>().getUserMap()}

@@ -8,5 +8,7 @@ import com.google.android.gms.maps.model.LatLng
 data class EventLocations(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val locations: List<LatLng>
+    val locations: List<LatLng>,
+    var startTime: Long = 0L,
+    var endTime: Long = 0L
 )

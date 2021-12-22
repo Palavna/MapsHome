@@ -6,4 +6,7 @@
     <string name="channel_name">channel_name</string>
     <string name="channel_description">channel_description</string>
     <string name="click">click</string>
+    <string name="endtime">endTime</string>
+    <string name="starttime">startTime</string>
+    <string name="location">локация</string>
 </resources>
