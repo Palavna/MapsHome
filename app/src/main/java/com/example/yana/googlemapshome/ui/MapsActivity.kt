@@ -16,13 +16,11 @@ import com.example.yana.googlemapshome.data.MapsAdapter
 import com.example.yana.googlemapshome.data.ServiceAction
 import com.example.yana.googlemapshome.data.SimpleService
 import com.example.yana.googlemapshome.databinding.ActivityMapsBinding
-import com.example.yana.googlemapshome.view.MapsApplication
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MapsActivity : BaseMapActivity() {
 
@@ -54,6 +52,8 @@ class MapsActivity : BaseMapActivity() {
         sheetBehavior = BottomSheetBehavior.from(binding.includedBottomSheet.bottomSheet)
         sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
+        binding.includedBottomSheet.recyclerMap.adapter = adapter
+
         binding.stop.setOnClickListener {
             if (isBound){
                 val intent = Intent(this, SimpleService::class.java)
@@ -70,8 +70,9 @@ class MapsActivity : BaseMapActivity() {
             time.start()
         }
 
-        viewModel.points.observe(this, {
 
+        viewModel.points.observe(this, {
+            adapter.addAll(it)
         })
 
         binding.includedBottomSheet.topBar.setOnClickListener {

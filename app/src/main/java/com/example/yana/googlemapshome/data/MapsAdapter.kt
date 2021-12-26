@@ -1,9 +1,12 @@
 package com.example.yana.googlemapshome.data
 
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yana.googlemapshome.databinding.ItemNotesMapBinding
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MapsAdapter: RecyclerView.Adapter<MapsViewHolder>() {
 
@@ -32,8 +35,13 @@ class MapsAdapter: RecyclerView.Adapter<MapsViewHolder>() {
 
 class MapsViewHolder(val binding: ItemNotesMapBinding): RecyclerView.ViewHolder(binding.root) {
     fun bind(eventLocations: EventLocations) {
-        binding.recyclerMap.text = eventLocations.locations.toString()
-        binding.recTimeStart.text = eventLocations.startTime.toString()
-        binding.recTimeEnd.text = eventLocations.endTime.toString()
-    }
-}
+        var startTime = 0L
+                val currentTime = System.currentTimeMillis()
+                val res = currentTime - startTime
+                val sdf = SimpleDateFormat("mm:ss", Locale.getDefault())
+                binding.recTimeStart.text = sdf.format(res)
+                binding.recyclerMap.text = eventLocations.locations.toString()
+                binding.recTimeStart.text = eventLocations.startTime.toString()
+                binding.recTimeEnd.text = eventLocations.endTime.toString()
+            }
+        }

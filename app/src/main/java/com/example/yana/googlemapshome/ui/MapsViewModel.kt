@@ -11,19 +11,16 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
-class MapsViewModel(private val mapsDao: MapsInterface): ViewModel() {
+class MapsViewModel(private val mapsDao: MapsInterface) : ViewModel() {
 
-    private val adapter = MapsAdapter()
     private val viewModelScope = CoroutineScope(Job())
     val points: LiveData<List<EventLocations>>
-    get() = mapsDao.getAllMapLiveData()
+        get() = mapsDao.getAllMapLiveData()
 
     fun savePoints(data: EventLocations) {
 //        TODO Dispatchers.Default - internet, Dispatchers.IO - DataBase(ROOM), Dispatchers.Main - mainThread
         viewModelScope.launch {
             mapsDao.saveMap(data)
-            val list = MapsApplication.DB?.getUserMap()?.getAllMap()
-            adapter.addAll(list)
         }
     }
 

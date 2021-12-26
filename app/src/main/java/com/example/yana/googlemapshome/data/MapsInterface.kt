@@ -13,6 +13,7 @@ interface MapsInterface {
     @Query("SELECT * FROM EventLocations")
     fun getAllMap(): List<EventLocations>
 
-    @Query("SELECT * FROM EventLocations")
+    @Query("SELECT * FROM EventLocations order by id desc limit 5")
+//    TODO asc
     fun getAllMapLiveData(): LiveData<List<EventLocations>>
 }
