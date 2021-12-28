@@ -10,5 +10,8 @@ data class EventLocations(
     val id: Int = 0,
     val locations: List<LatLng>,
     var startTime: Long = 0L,
-    var endTime: Long = 0L
+    var endTime: Long = 0L,
+    var totalDistance: Int = 0,
+    var timesInSeconds: Long = 0L,
+    var speed: Double = 0.0
 )

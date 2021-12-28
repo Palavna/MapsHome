@@ -36,10 +36,11 @@ class MapsAdapter: RecyclerView.Adapter<MapsViewHolder>() {
 class MapsViewHolder(val binding: ItemNotesMapBinding): RecyclerView.ViewHolder(binding.root) {
     fun bind(eventLocations: EventLocations) {
         var startTime = 0L
+         val result = eventLocations.endTime - eventLocations.startTime
                 val currentTime = System.currentTimeMillis()
                 val res = currentTime - startTime
                 val sdf = SimpleDateFormat("mm:ss", Locale.getDefault())
-                binding.recTimeStart.text = sdf.format(res)
+                binding.recTimeStart.text = sdf.format(result)
                 binding.recyclerMap.text = eventLocations.locations.toString()
                 binding.recTimeStart.text = eventLocations.startTime.toString()
                 binding.recTimeEnd.text = eventLocations.endTime.toString()
